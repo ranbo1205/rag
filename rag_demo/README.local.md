@@ -1,3 +1,21 @@
+### Local setup
+
+
+<br>1. 启动postgresql db 
+<br>PS D:\workspace\github\rag\rag_demo\src\main\docker>docker compose up -d
+
+<br>2. 启动 Phoenix（Docker）
+用 Docker 一条命令启动 Phoenix（含 UI + OTLP collector）：
+
+docker run -d --name phoenix `
+  -p 6006:6006 `
+-p 4317:4317 `
+  -e PHOENIX_PORT=6006 `
+arizephoenix/phoenix:latest
+<br>
+
+
+
 ### 使用docker 启动 pgvector 容器(postgresql db + 安装vector 扩展)， 用作rag 的embedding 数据库
 ## 1. 启动postgresql db
 <BR>PS D:\workspace\github\rag\rag_demo\src\main\docker>docker compose up -d
