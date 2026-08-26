@@ -29,6 +29,9 @@
     <properties>
         <java.version>17</java.version>
         <langchain4j.version>1.15.0</langchain4j.version>
+        <!-- pgvector 用对应的 beta 版 -->
+        <langchain4j.pgvector.version>1.15.0-beta25</langchain4j.pgvector.version>
+        <otel.version>1.62.0</otel.version>
     </properties>
     <dependencies>
         <dependency>
@@ -54,6 +57,68 @@
             <artifactId>langchain4j-open-ai</artifactId>
             <version>${langchain4j.version}</version>
         </dependency>
+
+        <!-- PGVector + JDBC + PostgreSQL 驱动 -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-pgvector</artifactId>
+            <version>${langchain4j.pgvector.version}</version>   <!-- 改成带 beta 后缀的 -->
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+
+        <!-- ===== OpenInference LangChain4j 插桩（Arize 官方坐标，0.1.8 已在中央仓库验证存在）===== -->
+        <dependency>
+            <groupId>com.arize</groupId>
+            <artifactId>openinference-instrumentation-langchain4j</artifactId>
+            <version>0.1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.arize</groupId>
+            <artifactId>openinference-semantic-conventions</artifactId>
+            <version>0.1.12</version>
+        </dependency>
+
+        <!-- ===== OpenTelemetry SDK + OTLP exporter（1.50.0 与插桩包匹配）===== -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <!-- 如需使用语义约定常量，用这个新坐标（旧 opentelemetry-semconv 已迁移）-->
+        <dependency>
+            <groupId>io.opentelemetry.semconv</groupId>
+            <artifactId>opentelemetry-semconv</artifactId>
+            <version>1.43.0</version>
+        </dependency>
+
+        <!--加 grpc-netty-shaded 依赖, 数据能不能发出去-->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>1.71.0</version>
+        </dependency>
+
+
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -1,45 +1,38 @@
 server:
   port: 8080
 
-# ==================== Spring ?? ====================
+# ==================== Spring Config ====================
 spring:
   application:
     name: rag-backend
 
-#  autoconfigure:
-#    exclude:
-#      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-#      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rag_db
+    username: postgres
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
 
+  jpa:
+    hibernate:
+      ddl-auto: validate   # table already created by init-scripts/01-init.sql
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+    show-sql: false
+    open-in-view: false
 
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/rag_db
-#    username: postgres
-#    password: ${DB_PASSWORD:postgres}
-#    driver-class-name: org.postgresql.Driver
-#    hikari:
-#      maximum-pool-size: 10
-#      minimum-idle: 2
-#      connection-timeout: 30000
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: validate   # ?? init-scripts/01-init.sql ????????
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
-#        format_sql: false
-#    show-sql: false
-#    open-in-view: false
-#
-#  # ?? Jackson ?????????????
-#  jackson:
-#    default-property-inclusion: non_null
+  jackson:
+    default-property-inclusion: non_null
 
-# ==================== LangChain4j ?????? API? ====================
+# ==================== LangChain4j Config ====================
 langchain4j:
-  # 1. Chat ?? ? DeepSeek?OpenAI ?????
   open-ai:
+    # 1. DeepSeek Chat Model
     chat-model:
       base-url: https://api.deepseek.com/v1
       api-key: ${DEEPSEEK_API_KEY}
@@ -50,27 +43,26 @@ langchain4j:
       log-requests: false
       log-responses: false
 
-  # 2. Embedding ?? ? ???? text-embedding-v3?1024 ??
-#  community:
-#    dashscope:
-#      embedding-model:
-#        api-key: ${DASHSCOPE_API_KEY}
-#        model-name: text-embedding-v3
+    # 2. Qwen Embedding Model (OpenAI-compatible endpoint)
+    embedding-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: ${DASHSCOPE_API_KEY}
+      model-name: text-embedding-v3
 
-# ==================== ??? RAG ?? ====================
-#rag:
-#  ingestion:
-#    init-dir: ./data/wiki     # ????????????
-#    chunk-size: 800            # ???????????? 500-1000?
-#    overlap: 150               # ?????
-#    batch-size: 50             # ????????
-#  retrieval:
-#    top-k: 5                   # ????????
-#    min-score: 0.5             # ?????????????0-1?
+# ==================== RAG Config ====================
+rag:
+  ingestion:
+    init-dir: ./data/wiki
+    chunk-size: 800
+    overlap: 150
+    batch-size: 50
+  retrieval:
+    top-k: 5
+    min-score: 0.5
 
-# ==================== ?? ====================
+# ==================== Logging ====================
 logging:
   level:
     root: INFO
-    com.example.rag: DEBUG
+    com.jk.ai.rag_demo: DEBUG
     dev.langchain4j: WARN
